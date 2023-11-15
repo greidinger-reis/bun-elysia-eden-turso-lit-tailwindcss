@@ -1,4 +1,4 @@
-import { ctx } from "@/context";
-import Elysia from "elysia";
+import { Context } from '@/context'
+import Elysia from 'elysia'
 
-export const api = new Elysia().use(ctx)
+export const Api = new Elysia({ prefix: '/api' }).use(Context)

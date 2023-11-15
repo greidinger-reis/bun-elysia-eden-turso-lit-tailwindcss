@@ -1,7 +1,8 @@
 import { Elysia } from 'elysia'
 import staticPlugin from '@elysiajs/static'
 import { config } from './config'
-import { pages } from './pages/*'
+import { Pages } from './pages/*'
+import { Api } from './controllers/*'
 
 new Elysia()
 	.use(
@@ -16,5 +17,6 @@ new Elysia()
 					: {},
 		}),
 	)
-    .use(pages)
+    .use(Api)
+    .use(Pages)
 	.listen(3000, ({ port, hostname }) => console.log(`🦊 Server running ${hostname}:${port}`))

@@ -1,4 +1,4 @@
 import Elysia from 'elysia'
-import { index } from '.'
+import { Index } from '.'
 
-export const pages = new Elysia().use(index)
+export const Pages = new Elysia().use(Index)
