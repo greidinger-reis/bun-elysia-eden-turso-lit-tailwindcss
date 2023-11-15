@@ -1,0 +1,50 @@
+{
+  "name": "pokemmo-breeder-ts",
+  "module": "src/main.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run tailwind && bun run build-client && bun run dev/gzip.ts && bun run src/main.ts",
+    "dev": "concurrently \"bun run tailwind:dev\" \"bun run build-client:watch\" \"bun run live-reload\" \"bun run --hot src/main.ts\"",
+    "live-reload": "bun run dev/live-reload-client.ts && bun run dev/live-reload-server.ts",
+    "tailwind": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css",
+    "tailwind:dev": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css --watch",
+    "build-client": "bun run dev/build.ts --input src/styles/input.css --output src/styles/output.js",
+    "build-client:watch": "bun run dev/build.ts --input src/styles/input.css --output src/styles/output.js --watch",
+    "typecheck": "bunx --bun tsc",
+    "format:check": "prettier --check .",
+    "format": "prettier --write . --list-different",
+    "lint": "eslint . --report-unused-disable-directives",
+    "lint:fix": "eslint . --report-unused-disable-directives --fix"
+  },
+  "devDependencies": {
+    "@t3-oss/env-core": "^0.7.1",
+    "@total-typescript/ts-reset": "^0.5.1",
+    "@types/csso": "^5.0.3",
+    "@types/minimist": "^1.2.5",
+    "bun-types": "latest",
+    "concurrently": "^8.2.2",
+    "csso": "^5.0.5",
+    "drizzle-kit": "^0.20.2",
+    "minimist": "^1.2.8",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "tailwindcss": "^3.3.5",
+    "ts-lit-plugin": "^2.0.1",
+    "zod": "^3.22.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@bogeychan/elysia-logger": "^0.0.13",
+    "@elysiajs/cron": "^0.7.0",
+    "@elysiajs/static": "^0.7.1",
+    "@lit-labs/ssr": "^3.1.9",
+    "@tlscipher/holt": "^1.1.2",
+    "drizzle-orm": "^0.29.0",
+    "elysia": "^0.7.24",
+    "lit": "latest",
+    "pino-pretty": "^10.2.3",
+    "ts-results": "^3.3.0"
+  }
+}
