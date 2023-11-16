@@ -1,11 +1,11 @@
 import { OAuthRequestError } from '@lucia-auth/oauth'
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
 import { parseCookie, serializeCookie } from 'lucia/utils'
 import { config } from '../config'
 import { Context } from '../context'
 import { syncIfLocal } from '@/db'
 import { googleAuth } from '@/auth'
-import { Try } from '@/lib/try'
+import { Try } from '@/lib'
 
 export const authController = new Elysia({
 	prefix: '/auth',
@@ -42,6 +42,17 @@ export const authController = new Elysia({
 		set.redirect = url.toString()
 	})
 	.get('/google/callback', async (ctx) => {
+		function failed(e: Error) {
+			ctx.log.error(e, 'Error signing in with Google')
+			if (e instanceof OAuthRequestError) {
+				ctx.set.status = 'Unauthorized'
+				return
+			} else {
+				ctx.set.status = 'Internal Server Error'
+				return
+			}
+		}
+
 		const { state, code } = ctx.query
 
 		const cookies = parseCookie(ctx.headers['cookie'] || '')
@@ -53,20 +64,14 @@ export const authController = new Elysia({
 		}
 
 		const res = await Try(() => googleAuth.validateCallback(code))()
-		const { getExistingUser, createUser, googleUser } = res
-			.mapErr((e) => {
-				ctx.log.error(e, 'Error signing in with Google')
-				if (e instanceof OAuthRequestError) {
-					ctx.set.status = 'Unauthorized'
-					return
-				} else {
-					ctx.set.status = 'Internal Server Error'
-					return
-				}
-			})
-			.unwrap()
 
-		const getUser = Try(async () => {
+		if (res.err) {
+			return failed(res.val)
+		}
+
+		const { getExistingUser, createUser, googleUser } = res.val
+
+		const user = await Try(async () => {
 			const existingUser = await getExistingUser()
 
 			if (existingUser) {
@@ -82,32 +87,24 @@ export const authController = new Elysia({
 			})
 
 			return user
-		})
+		})()
 
-		const user = (await getUser())
-			.mapErr((e) => {
-				ctx.log.error(e, 'Error creating user')
-				ctx.set.status = 'Internal Server Error'
-				return
-			})
-			.unwrap()
+		if (user.err) {
+			return failed(user.val)
+		}
 
-		const session = (
-			await Try(() =>
-				ctx.auth.createSession({
-					userId: user.userId,
-					attributes: {},
-				}),
-			)()
-		)
-			.mapErr((e) => {
-				ctx.log.error(e, 'Error creating session')
-				ctx.set.status = 'Internal Server Error'
-				return
-			})
-			.unwrap()
+		const session = await Try(() =>
+			ctx.auth.createSession({
+				userId: user.val.userId,
+				attributes: {},
+			}),
+		)()
 
-		const sessionCookie = ctx.auth.createSessionCookie(session)
+		if (session.err) {
+			return failed(session.val)
+		}
+
+		const sessionCookie = ctx.auth.createSessionCookie(session.val)
 
 		await syncIfLocal()
 
