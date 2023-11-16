@@ -16,7 +16,6 @@ const env = createEnv({
 			}),
 		NODE_ENV: z.enum(['development', 'production']),
 		HOST_URL: z.string().min(1),
-		TURSO_API_KEY: z.string().min(1),
 	},
 	runtimeEnv: process.env,
 })

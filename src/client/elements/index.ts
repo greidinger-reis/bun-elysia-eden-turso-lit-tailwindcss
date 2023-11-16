@@ -1,1 +1,1 @@
-export * from './pokemon-select'
+export * from './login-form'

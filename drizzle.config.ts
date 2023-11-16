@@ -7,7 +7,7 @@ const dbCredentials = {
 };
 
 const cfg: Config = {
-  schema: "./src/db/primary/schema/index.ts",
+  schema: "./src/db/schema/index.ts",
   driver: "turso",
   dbCredentials,
   verbose: true,

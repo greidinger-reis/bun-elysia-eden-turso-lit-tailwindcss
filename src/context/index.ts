@@ -5,11 +5,10 @@ import { Elysia } from 'elysia'
 import pretty from 'pino-pretty'
 import { auth } from '@/auth'
 import { config } from '@/config'
-import { client, db } from '@/db/primary'
+import { client, db } from '@/db'
 import { TemplateResult } from 'lit'
 import { render } from '@lit-labs/ssr'
 import { collectResultSync } from '@lit-labs/ssr/lib/render-result'
-import { TursoClient } from '@turso-client'
 
 const stream = pretty({
 	colorize: true,
@@ -23,7 +22,6 @@ const loggerConfig =
 		  }
 		: { level: config.env.LOG_LEVEL }
 
-const turso = new TursoClient(config.env.TURSO_API_KEY)
 
 export const Context = new Elysia({
 	name: '@app/ctx',
@@ -31,7 +29,6 @@ export const Context = new Elysia({
 	.decorate('db', db)
 	.decorate('config', config)
 	.decorate('auth', auth)
-	.decorate('turso', turso)
 	.derive(async (ctx) => {
 		const authRequest = ctx.auth.handleRequest(ctx)
 		const session = await authRequest.validate()

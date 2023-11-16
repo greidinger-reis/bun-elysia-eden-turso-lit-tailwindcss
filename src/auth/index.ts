@@ -1,7 +1,7 @@
 import { libsql } from '@lucia-auth/adapter-sqlite'
 import { lucia, Middleware } from 'lucia'
 import { config } from '@/config'
-import { client } from '@/db/primary'
+import { client } from '@/db'
 
 const envAliasMap = {
 	production: 'PROD',
@@ -50,7 +50,6 @@ export const auth = lucia({
 			picture: data.picture,
 			email: data.email,
 			id: data.id,
-			organization_id: data.organization_id,
 		}
 	},
 })

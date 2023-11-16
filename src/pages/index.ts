@@ -8,7 +8,7 @@ export const IndexPage = new Elysia().use(Context).get('/', ({ render, session }
 		BaseHtml(
 			html`<div class="flex flex-col items-center py-3">
 				${session
-					? html`<h1 class="text-2xl font-bold text-gray-800" safe>Hi! {session.user.name}</h1>
+					? html`<h1 class="text-2xl font-bold text-gray-800" safe>Hi! ${session.user.name}</h1>
 							<a
 								href="/dashboard"
 								class="mt-4 rounded-lg bg-green-500 px-4 py-2 text-white transition duration-200 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"

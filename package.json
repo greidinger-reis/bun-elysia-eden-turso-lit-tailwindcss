@@ -11,7 +11,6 @@
     "build-client": "bun run dev/build.ts --input src/styles/input.css --output src/styles/output.js",
     "build-client:watch": "bun run dev/build.ts --input src/styles/input.css --output src/styles/output.js --watch",
     "db:push": "bunx drizzle-kit push:sqlite",
-    "db:push:tenants": "bun run ./src/db/tenant/migrate.ts",
     "db:studio": "bunx drizzle-kit studio",
     "db:seed": "bun run src/model/store/seed.ts",
     "typecheck": "bunx --bun tsc",
