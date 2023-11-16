@@ -34,18 +34,7 @@ export const AuthPages = new Elysia({ prefix: '/auth' })
 			BaseHtml(html`
 				<div class="flex flex-col gap-8 justify-center items-center py-32">
 					<h1 class="text-2xl text-bold">Sign Up</h1>
-					<form hx-post="/api/auth/signup" class="space-y-4 w-full max-w-xl">
-						<input name="email" type="email" placeholder="Email"></input>
-						<input name="name" type="text" placeholder="Name"></input>
-						<input
-							name="password"
-							type="password"
-							placeholder="Password"
-							password-toggle
-						></input>
-						<!-- <sl-checkbox> I agree to the <a href="#">terms and conditions</a> </sl-checkbox> -->
-						<button class="block" type="submit">Submit</button>
-					</form>
+					<signup-form></signup-form>
 				</div>
 			`),
 		)

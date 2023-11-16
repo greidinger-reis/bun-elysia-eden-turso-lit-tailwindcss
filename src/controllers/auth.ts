@@ -1,40 +1,14 @@
 import { Elysia, t } from 'elysia'
 import { Context } from '../context'
 import { Try } from '@/lib'
+import { SignUpSchema } from '@/models/validation/auth'
 
 export const AuthController = new Elysia({
 	prefix: '/auth',
 })
 	.use(Context)
 	.model({
-		'auth.signin': t.Object({
-			email: t.String({
-				format: 'email',
-			}),
-			password: t.String(),
-		}),
-		'auth.signup': t.Object({
-			email: t.String({
-				format: 'email',
-				default: '',
-				error() {
-					return 'Invalid email'
-				},
-			}),
-			name: t.String({
-				minLength: 4,
-				maxLength: 32,
-				error() {
-					return 'Name min length: 4 and max length: 32'
-				},
-			}),
-			password: t.String({
-				minLength: 6,
-				error() {
-					return 'Weak password'
-				},
-			}),
-		}),
+		
 	})
 	.post(
 		'/signup',
@@ -91,8 +65,7 @@ export const AuthController = new Elysia({
 			return null
 		},
 		{
-			type: 'formdata',
-			body: 'auth.signup',
+			body: SignUpSchema
 		},
 	)
 	.get('/signout', async (ctx) => {

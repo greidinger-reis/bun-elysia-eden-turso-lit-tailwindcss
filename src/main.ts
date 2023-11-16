@@ -4,7 +4,7 @@ import { config } from './config'
 import { Pages } from './pages/*'
 import { Api } from './controllers/*'
 
-new Elysia()
+const app = new Elysia()
 	.use(
 		staticPlugin({
 			assets: 'public',
@@ -20,3 +20,5 @@ new Elysia()
     .use(Api)
     .use(Pages)
 	.listen(3000, ({ port, hostname }) => console.log(`🦊 Server running ${hostname}:${port}`))
+
+export type App = typeof app
