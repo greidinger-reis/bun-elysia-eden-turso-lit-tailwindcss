@@ -20,7 +20,11 @@ export const AuthPages = new Elysia({ prefix: '/auth' })
 					<div class="p-4">
 						<a href="/" class="text-indigo-600 hover:text-indigo-800 hover:underline"> Go Home </a>
 					</div>
-					<login-form></login-form>
+					<form hx-post="/api/auth/signin" class="flex flex-col gap-4 w-full max-w-2xl">
+						<sl-input type="email" label="Email" name="email"></sl-input>
+						<sl-input type="password" label="Password" name="password"></sl-input>
+						<sl-button type="submit" class="w-full block">Submit</sl-button>
+					</form>
 				</div>`,
 			),
 		)
@@ -32,10 +36,8 @@ export const AuthPages = new Elysia({ prefix: '/auth' })
 		}
 		return ctx.render(
 			BaseHtml(html`
-				<div class="flex flex-col gap-8 justify-center items-center py-32">
-					<h1 class="text-2xl text-bold">Sign Up</h1>
-					<signup-form></signup-form>
-				</div>
+				<h1 class="text-2xl text-bold">Sign Up</h1>
+				<sign-up-form></sign-up-form>
 			`),
 		)
 	})

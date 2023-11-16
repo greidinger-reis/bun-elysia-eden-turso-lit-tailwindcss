@@ -1,31 +1,13 @@
-import { t } from 'elysia'
+import { z } from 'zod'
 
-export const SignInSchema = t.Object({
-	email: t.String({
-		format: 'email',
-	}),
-	password: t.String(),
+export const SignUpSchema = z.object({
+	name: z.string().min(4, 'Name must be at least 4 characters long').max(32, 'Name must be at most 32 characters long'),
+	email: z.string().email(),
+	password: z.string().min(6, 'Password must be at least 6 characters long').max(32, 'Password must be at most 32 characters long'),
 })
 
-export const SignUpSchema = t.Object({
-	email: t.String({
-		format: 'email',
-		default: '',
-		error() {
-			return 'Invalid email'
-		},
-	}),
-	name: t.String({
-		minLength: 4,
-		maxLength: 32,
-		error() {
-			return 'Name min length: 4 and max length: 32'
-		},
-	}),
-	password: t.String({
-		minLength: 6,
-		error() {
-			return 'Weak password'
-		},
-	}),
+export const SignInSchema = z.object({
+	email: z.string(),
+	password: z.string()
 })
+

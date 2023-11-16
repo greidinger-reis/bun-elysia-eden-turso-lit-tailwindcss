@@ -17,8 +17,8 @@ const app = new Elysia()
 					: {},
 		}),
 	)
-    .use(Api)
-    .use(Pages)
+	.use(Api)
+	.use(Pages)
 	.listen(3000, ({ port, hostname }) => console.log(`🦊 Server running ${hostname}:${port}`))
 
 export type App = typeof app
