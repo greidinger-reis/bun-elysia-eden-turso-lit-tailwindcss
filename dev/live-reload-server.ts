@@ -1,6 +1,8 @@
 import { Elysia } from 'elysia'
 import { type ElysiaWS } from 'elysia/ws'
 
+//Source: https://github.com/ethanniser/the-beth-stack/
+
 let wsConnections = new Set<ElysiaWS<any, any>>()
 
 function dispatch() {

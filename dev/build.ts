@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { minify } from 'csso'
-import { config } from '@/config/config'
+import { config } from '@/config'
 import minimist from 'minimist'
 
 

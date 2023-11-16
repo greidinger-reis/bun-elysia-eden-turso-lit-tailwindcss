@@ -1,16 +1,21 @@
 import { relations } from 'drizzle-orm'
-import { blob, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { post } from '.'
+import { blob, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { organizations } from '.'
 
 export const user = sqliteTable('user', {
-	id: text('id').primaryKey(),
+	id: text('id').primaryKey().notNull(),
 	name: text('name').notNull(),
 	email: text('email'),
 	picture: text('picture').notNull(),
+	organization_id: text('organization_id').notNull(),
+	// other user attributes
 })
 
-export const userRelations = relations(user, ({many})=> ({
-    posts: many(post)
+export const userRelations = relations(user, ({ one }) => ({
+	organization: one(organizations, {
+		fields: [user.organization_id],
+		references: [organizations.id],
+	}),
 }))
 
 export const session = sqliteTable('user_session', {

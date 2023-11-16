@@ -9,6 +9,13 @@ export function BaseHtml(slot: TemplateResult) {
 			<title>Bun+Elysia+HTMX+Lit SSR+Tailwind</title>
 			<!-- Client bundle -->
 			<script src="/index.js" type="module"></script>
+			<!-- Htmx -->
+			<script src="https://unpkg.com/htmx.org@1.9.5"></script>
+			<script>
+				htmx.config.globalViewTransitions = true
+			</script>
+			<script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
+			<script src="https://unpkg.com/htmx.org/dist/ext/loading-states.js"></script>
 			<!-- Shoelace styles -->
 			<link
 				rel="stylesheet"
@@ -27,9 +34,8 @@ export function BaseHtml(slot: TemplateResult) {
 				  `
 				: null}
 		</head>
-		<body>
+		<body hx-boost="true" hx-ext="loading-states">
 			${slot}
 		</body>
 	</html>`
 }
-

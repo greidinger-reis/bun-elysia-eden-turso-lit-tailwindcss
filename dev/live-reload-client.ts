@@ -1,5 +1,6 @@
 import fs from "fs"
 
+//Source: https://github.com/ethanniser/the-beth-stack/
 export function liveReloadScript({
 	debounceTime = 100,
 	url = 'ws://localhost:3001/ws',

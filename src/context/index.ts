@@ -5,10 +5,11 @@ import { Elysia } from 'elysia'
 import pretty from 'pino-pretty'
 import { auth } from '@/auth'
 import { config } from '@/config'
-import { client, db } from '@/db'
+import { client, db } from '@/db/primary'
 import { TemplateResult } from 'lit'
 import { render } from '@lit-labs/ssr'
 import { collectResultSync } from '@lit-labs/ssr/lib/render-result'
+import { TursoClient } from '@turso-client'
 
 const stream = pretty({
 	colorize: true,
@@ -22,17 +23,18 @@ const loggerConfig =
 		  }
 		: { level: config.env.LOG_LEVEL }
 
+const turso = new TursoClient(config.env.TURSO_API_KEY)
+
 export const Context = new Elysia({
 	name: '@app/ctx',
 })
 	.decorate('db', db)
 	.decorate('config', config)
 	.decorate('auth', auth)
+	.decorate('turso', turso)
 	.derive(async (ctx) => {
-		const now = performance.now()
 		const authRequest = ctx.auth.handleRequest(ctx)
 		const session = await authRequest.validate()
-		console.log('auth time', performance.now() - now, 'ms')
 
 		return { session }
 	})
@@ -73,28 +75,3 @@ export const Context = new Elysia({
 			  })
 			: (a) => a,
 	)
-	.onStart(({ log }) => {
-		if (log && config.env.NODE_ENV === 'production') {
-			log.info('Server started')
-		}
-	})
-	.onStop(({ log }) => {
-		if (log && config.env.NODE_ENV === 'production') {
-			log.info('Server stopped')
-		}
-	})
-	.onRequest(({ log, request }) => {
-		if (log && config.env.NODE_ENV === 'production') {
-			log.debug(`Request received: ${request.method}: ${request.url}`)
-		}
-	})
-	.onResponse(({ log, request, set }) => {
-		if (log && config.env.NODE_ENV === 'production') {
-			log.debug(`Response sent: ${request.method}: ${request.url}`)
-		}
-	})
-	.onError(({ log, error }) => {
-		if (log && config.env.NODE_ENV === 'production') {
-			log.error(error)
-		}
-	})

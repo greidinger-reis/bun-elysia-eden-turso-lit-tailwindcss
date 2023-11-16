@@ -22,7 +22,8 @@
 		],
 		"plugins": [{ "name": "ts-lit-plugin" }],
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@turso-client": ["./turso"]
 		}
 	},
 	"exclude": ["public"]

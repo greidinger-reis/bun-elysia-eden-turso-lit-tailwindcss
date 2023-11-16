@@ -1,8 +1,7 @@
 import { libsql } from '@lucia-auth/adapter-sqlite'
-import { google } from "@lucia-auth/oauth/providers";
 import { lucia, Middleware } from 'lucia'
 import { config } from '@/config'
-import { client } from '@/db'
+import { client } from '@/db/primary'
 
 const envAliasMap = {
 	production: 'PROD',
@@ -57,9 +56,3 @@ export const auth = lucia({
 })
 
 export type Auth = typeof auth
-
-export const googleAuth = google(auth, {
-    clientId: config.env.GOOGLE_CLIENT_ID,
-    clientSecret: config.env.GOOGLE_CLIENT_SECRET,
-    redirectUri: `${config.env.HOST_URL}api/auth/google/callback`,
-  });

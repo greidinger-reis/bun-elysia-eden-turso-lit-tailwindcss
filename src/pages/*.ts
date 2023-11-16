@@ -1,4 +1,6 @@
 import Elysia from 'elysia'
-import { Index } from '.'
+import { IndexPage } from '.'
+import { NewUserPage } from './new-user'
+import { LoginPage } from './login'
 
-export const Pages = new Elysia().use(Index)
+export const Pages = new Elysia().use(IndexPage).use(NewUserPage).use(LoginPage)
