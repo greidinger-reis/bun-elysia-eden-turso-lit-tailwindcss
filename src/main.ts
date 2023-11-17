@@ -3,6 +3,7 @@ import staticPlugin from '@elysiajs/static'
 import { config } from './config'
 import { Pages } from './pages/*'
 import { Api } from './controllers/*'
+import "./web/components"
 
 const app = new Elysia()
 	.use(
@@ -19,6 +20,6 @@ const app = new Elysia()
 	)
 	.use(Api)
 	.use(Pages)
-	.listen(3000, ({ port, hostname }) => console.log(`🦊 Server running ${hostname}:${port}`))
+	.listen(8080, ({ port, hostname }) => console.log(`🦊 Server running ${hostname}:${port}`))
 
 export type App = typeof app

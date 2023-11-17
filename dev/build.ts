@@ -3,7 +3,6 @@ import { minify } from 'csso'
 import { config } from '@/config'
 import minimist from 'minimist'
 
-
 function parseArgs(): [string, string, boolean] {
 	const argv = Bun.argv.slice(2)
 	const args = minimist(argv, {
@@ -40,7 +39,7 @@ class ClientBundler {
 		const start = Date.now()
 		this.makePublicFolder()
 		await Bun.build({
-			entrypoints: ['src/client/index.ts'],
+			entrypoints: ['src/web/index.ts'],
 			outdir: 'public',
 			target: 'browser',
 			minify: config.env.NODE_ENV === 'production',
@@ -54,7 +53,7 @@ class ClientBundler {
 
 		if (dev) {
 			let reloadCount = 0
-			fs.watch('src/client/elements', { persistent: false }, async () => {
+			fs.watch('src/web/components', { persistent: false }, async () => {
 				reloadCount++
 				await this.buildClient()
 				await fetch('http://localhost:3001/restart')

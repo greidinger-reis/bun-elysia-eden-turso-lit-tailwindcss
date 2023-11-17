@@ -1,6 +1,6 @@
 import { Context } from '@/context'
 import Elysia from 'elysia'
-import { BaseHtml } from '../elements/base'
+import { BaseHtml } from '../components/base'
 import { html } from 'lit'
 
 export const NewUserPage = new Elysia().use(Context).get('/new-user', async (ctx) => {

@@ -1,6 +1,6 @@
 import { Context } from '@/context'
 import Elysia from 'elysia'
-import { BaseHtml } from '../elements/base'
+import { BaseHtml } from '../components/base'
 import { html } from 'lit'
 
 export const IndexPage = new Elysia().use(Context).get('/', ({ render, session }) => {
@@ -13,8 +13,8 @@ export const IndexPage = new Elysia().use(Context).get('/', ({ render, session }
 							<sl-button href="/api/auth/signout"> Sign Out </sl-button> `
 					: html`
 							<div class="flex gap-2 items-center">
-								<sl-button href="/auth/signin" hx-boost="false"> Sign In </sl-button>
-								<sl-button href="/auth/signup" hx-boost="false"> Sign Up </sl-button>
+								<sl-button href="/auth/signin" hx-boost="false"> Sign in </sl-button>
+								<sl-button href="/auth/signup" hx-boost="false"> Sign up </sl-button>
 							</div>
 					  `}
 			</div>`,

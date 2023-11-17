@@ -6,9 +6,9 @@ import pretty from 'pino-pretty'
 import { auth } from '@/auth'
 import { config } from '@/config'
 import { client, db } from '@/db'
-import { TemplateResult } from 'lit'
+import { HTMLTemplateResult } from 'lit'
 import { render } from '@lit-labs/ssr'
-import { collectResultSync } from '@lit-labs/ssr/lib/render-result'
+import { collectResult } from '@lit-labs/ssr/lib/render-result'
 
 const stream = pretty({
 	colorize: true,
@@ -17,11 +17,10 @@ const stream = pretty({
 const loggerConfig =
 	config.env.NODE_ENV === 'development'
 		? {
-				level: config.env.LOG_LEVEL,
-				stream,
-		  }
+			level: config.env.LOG_LEVEL,
+			stream,
+		}
 		: { level: config.env.LOG_LEVEL }
-
 
 export const Context = new Elysia({
 	name: '@app/ctx',
@@ -35,11 +34,13 @@ export const Context = new Elysia({
 
 		return { session }
 	})
-	.derive(({ set }) => ({
-		render: (template: TemplateResult) => {
-			set.headers['Content-Type'] = 'text/html'
-			const res = render(template)
-			return collectResultSync(res)
+	.derive(() => ({
+		render: async (template: HTMLTemplateResult) => {
+			return new Response(await collectResult(render(template)), {
+				headers: {
+					'Content-Type': 'text/html'
+				}
+			})
 		},
 	}))
 	.derive(({ set, headers }) => ({
@@ -60,15 +61,15 @@ export const Context = new Elysia({
 		// @ts-expect-error
 		config.env.DATABASE_CONNECTION_TYPE === 'local-replica'
 			? cron({
-					name: 'heartbeat',
-					pattern: '*/2 * * * * *',
-					run() {
-						const now = performance.now()
-						// console.log("Syncing database...");
-						void client.sync().then(() => {
-							// console.log(`Database synced in ${performance.now() - now}ms`);
-						})
-					},
-			  })
+				name: 'heartbeat',
+				pattern: '*/2 * * * * *',
+				run() {
+					const now = performance.now()
+					console.log("Syncing database...");
+					void client.sync().then(() => {
+						console.log(`Database synced in ${performance.now() - now}ms`);
+					})
+				},
+			})
 			: (a) => a,
 	)

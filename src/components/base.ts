@@ -1,21 +1,19 @@
-import { TemplateResult, html } from 'lit'
+import { type HTMLTemplateResult, html } from 'lit'
 import { config } from '../config'
 
-export function BaseHtml(slot: TemplateResult) {
+export const BaseHtml = (slot: HTMLTemplateResult) => {
 	return html`<html lang="en">
 		<head>
 			<meta charset="UTF-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 			<title>Bun+Elysia+HTMX+Lit SSR+Tailwind</title>
-			<!-- Client bundle -->
-			<script src="/index.js" type="module"></script>
-			<!-- Htmx -->
-			<script src="https://unpkg.com/htmx.org@1.9.5"></script>
-			<script>
-				htmx.config.globalViewTransitions = true
-			</script>
+			<!-- HTMX -->
+			<script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+			<script>htmx.config.globalViewTransitions = true</script>
 			<script src="https://unpkg.com/htmx.org/dist/ext/response-targets.js"></script>
 			<script src="https://unpkg.com/htmx.org/dist/ext/loading-states.js"></script>
+			<!-- Client bundle -->
+			<script defer src="/index.js" type="module"></script>
 			<!-- Shoelace styles -->
 			<link
 				rel="stylesheet"
@@ -27,12 +25,7 @@ export function BaseHtml(slot: TemplateResult) {
 			></script>
 			<!-- Style for server rendered templates -->
 			<link rel="stylesheet" href="/styles.css" />
-			${config.env.NODE_ENV === 'development'
-				? html`
-						<!-- Live reload script -->
-						<script src="/live-reload.js"></script>
-				  `
-				: null}
+			${config.env.NODE_ENV === 'development' ? html`<script src="/live-reload.js"></script>` : null}
 		</head>
 		<body hx-boost="true" hx-ext="loading-states">
 			${slot}
