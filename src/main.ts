@@ -1,3 +1,4 @@
+import "../lib.d.ts"
 import { Elysia } from 'elysia'
 import staticPlugin from '@elysiajs/static'
 import { config } from './config'

@@ -1,11 +1,11 @@
-import { Result, Ok, Err } from 'ts-results'
+import { Option as _Option, Result as _Result, Ok as _Ok, Err as _Err } from 'ts-results'
 
 /**
  * Wraps a synchronous function with a try-catch block and returns a Result type.
  * @param fn The function to wrap.
  * @returns A new function that returns a Result type.
  */
-export function TrySync<T, Args extends any[]>(fn: (...args: Args) => T): (...args: Args) => Result<T, Error> {
+function _TrySync<T, Args extends any[]>(fn: (...args: Args) => T): (...args: Args) => Result<T, Error> {
 	return (...args: Args): Result<T, Error> => {
 		try {
 			const result = fn(...args)
@@ -25,7 +25,7 @@ export function TrySync<T, Args extends any[]>(fn: (...args: Args) => T): (...ar
  * @param {(...args: Args) => Promise<T>} fn The original async function to wrap.
  * @returns {(...args: Args) => Promise<Result<T, Error>>} A new function that returns a Promise which resolves to a Result object.
  */
-export function Try<T, Args extends any[]>(
+function _Try<T, Args extends any[]>(
 	fn: (...args: Args) => Promise<T>,
 ): (...args: Args) => Promise<Result<T, Error>> {
 	return async (...args: Args): Promise<Result<T, Error>> => {
@@ -37,3 +37,21 @@ export function Try<T, Args extends any[]>(
 		}
 	}
 }
+
+declare global {
+	type Result<T,E> = _Result<T,E>
+	type Option<T> = _Option<T>
+	var Ok: typeof _Ok
+	var Err: typeof _Err
+	var TrySync: typeof _TrySync
+	var Try: typeof _Try
+}
+
+global.Result = _Result
+global.Option = _Option
+global.Ok = _Ok
+global.Err = _Err
+global.TrySync = _TrySync
+global.Try = _Try
+
+export {}

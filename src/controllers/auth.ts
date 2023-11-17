@@ -1,6 +1,5 @@
 import { Elysia, t } from 'elysia'
 import { Context } from '../context'
-import { Try } from '@/lib'
 import { SignUpSchema } from '@/models/validation/auth'
 
 export const AuthController = new Elysia({
