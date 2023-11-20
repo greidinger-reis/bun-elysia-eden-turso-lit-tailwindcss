@@ -1,5 +1,6 @@
-import { Context } from '@/context'
+import { context } from '@/context'
 import Elysia from 'elysia'
-import { AuthController } from './auth'
+import { authController } from './auth'
+import { exampleComponentController } from '@/web/components/example-component.server'
 
-export const Api = new Elysia({ prefix: '/api' }).use(Context).use(AuthController)
+export const Api = new Elysia({ prefix: '/api' }).use(context).use(authController).use(exampleComponentController)

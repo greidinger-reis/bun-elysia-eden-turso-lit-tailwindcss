@@ -1,11 +1,11 @@
-import { Elysia, t } from 'elysia'
-import { Context } from '../context'
+import { Elysia } from 'elysia'
+import { context } from '../context'
 import { SignUpSchema } from '@/models/validation/auth'
 
-export const AuthController = new Elysia({
+export const authController = new Elysia({
 	prefix: '/auth',
 })
-	.use(Context)
+	.use(context)
 	.post('/signup', async (ctx) => {
 		ctx.log.info('Hello')
 		const error = (e: Error) => {
@@ -63,10 +63,7 @@ export const AuthController = new Elysia({
 		const authRequest = ctx.auth.handleRequest(ctx)
 		const session = await authRequest.validate()
 
-		if (!session) {
-			ctx.redirect('/')
-			return
-		}
+		if (!session) return ctx.redirect('/')
 
 		await ctx.auth.invalidateSession(session.sessionId)
 

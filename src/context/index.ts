@@ -22,36 +22,33 @@ const loggerConfig =
 		}
 		: { level: config.env.LOG_LEVEL }
 
-export const Context = new Elysia({
+export const context = new Elysia({
 	name: '@app/ctx',
 })
 	.decorate('db', db)
 	.decorate('config', config)
 	.decorate('auth', auth)
+	.derive(async (ctx) => (
+		{
+			redirect: (to: string) => {
+				ctx.set.redirect = to
+				return
+			}
+		}
+	))
 	.derive(async (ctx) => {
 		const authRequest = ctx.auth.handleRequest(ctx)
 		const session = await authRequest.validate()
 
 		return { session }
 	})
-	.derive(() => ({
-		render: async (template: HTMLTemplateResult) => {
-			return new Response(await collectResult(render(template)), {
-				headers: {
-					'Content-Type': 'text/html'
-				}
-			})
-		},
-	}))
-	.derive(({ set, headers }) => ({
-		redirect: (href: string) => {
-			if (headers['hx-request'] === 'true') {
-				set.headers['HX-Location'] = href
-			} else {
-				set.redirect = href
-			}
-		},
-	}))
+	.decorate('render', async (template: HTMLTemplateResult) => {
+		return new Response(await collectResult(render(template)), {
+			headers: {
+				'Content-Type': 'text/html',
+			},
+		})
+	})
 	.use(logger(loggerConfig))
 	.use(
 		// @ts-expect-error

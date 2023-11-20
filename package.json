@@ -1,10 +1,10 @@
 {
   "name": "pokemmo-breeder-ts",
-  "module": "src/main.ts",
+  "module": "src/app.ts",
   "type": "module",
   "scripts": {
-    "start": "bun run tailwind && bun run build-client && bun run dev/gzip.ts && bun run src/main.ts",
-    "dev": "concurrently \"bun run build-client:watch\" \"bun run tailwind:dev\" \"bun run live-reload\" \"bun run --hot src/main.ts\"",
+    "start": "bun run tailwind && bun run build-client && bun run dev/gzip.ts && bun run src/app.ts",
+    "dev": "concurrently \"bun run build-client:watch\" \"bun run tailwind:dev\" \"bun run live-reload\" \"bun run --hot src/app.ts\"",
     "live-reload": "bun run dev/live-reload-client.ts && bun run dev/live-reload-server.ts",
     "tailwind": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css",
     "tailwind:dev": "tailwindcss -i ./src/styles/tailwind-input.css -o ./src/styles/input.css --watch",
@@ -42,6 +42,7 @@
   "dependencies": {
     "@bogeychan/elysia-logger": "^0.0.13",
     "@elysiajs/cron": "^0.7.0",
+    "@elysiajs/eden": "^0.7.4",
     "@elysiajs/static": "^0.7.1",
     "@libsql/client": "^0.3.6",
     "@lit-labs/ssr": "^3.2.0",
