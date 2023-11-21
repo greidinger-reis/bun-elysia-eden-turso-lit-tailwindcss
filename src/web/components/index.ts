@@ -1,1 +1,2 @@
-import './example-component'
+import './todos'
+import './auth'

@@ -1,10 +1,10 @@
-import "../lib.d.ts"
+import '../lib.d.ts'
 import { Elysia } from 'elysia'
 import staticPlugin from '@elysiajs/static'
 import { config } from './config'
-import { Pages } from './pages/*'
-import { Api } from './controllers/*'
-import "./web/components"
+import { pages } from './pages/*'
+import { api } from './controllers/*'
+import './web/components'
 
 const app = new Elysia()
 	.use(
@@ -19,8 +19,8 @@ const app = new Elysia()
 					: {},
 		}),
 	)
-	.use(Api)
-	.use(Pages)
+	.use(api)
+	.use(pages)
 	.listen(3000, ({ port, hostname }) => console.log(`🦊 Server running ${hostname}:${port}`))
 
 export type App = typeof app

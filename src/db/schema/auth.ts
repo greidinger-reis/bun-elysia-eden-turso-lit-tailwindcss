@@ -1,17 +1,17 @@
 import { relations } from 'drizzle-orm'
 import { blob, sqliteTable, text } from 'drizzle-orm/sqlite-core'
-import { counter } from './counter'
+import { todo } from '.'
 
 export const user = sqliteTable('user', {
 	id: text('id').primaryKey().notNull(),
 	name: text('name').notNull(),
 	email: text('email').notNull(),
-	picture: text('picture')
+	picture: text('picture'),
 	// other user attributes
 })
 
-export const userRelations = relations(user, ({ one, many }) => ({
-	counters: many(counter)
+export const userRelations = relations(user, ({ many }) => ({
+	counters: many(todo),
 }))
 
 export const session = sqliteTable('user_session', {

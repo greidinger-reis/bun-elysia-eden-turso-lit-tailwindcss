@@ -1,11 +1,11 @@
 import { context } from '@/context'
 import Elysia from 'elysia'
-import { BaseHtml } from '../components/base'
+import { baseHtml } from '../components/base'
 import { html } from 'lit'
 
-export const IndexPage = new Elysia().use(context).get('/', ({ render, session }) => {
+export const indexPage = new Elysia().use(context).get('/', ({ render, session }) => {
 	return render(
-		BaseHtml(
+		baseHtml(
 			html`<div class="flex flex-col items-center py-3">
 				${session
 					? html`<h1 class="text-2xl font-bold text-gray-800" safe>Hi! ${session.user.name}</h1>
