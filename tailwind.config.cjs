@@ -1,4 +1,5 @@
-const {addDynamicIconSelectors} = require("@iconify/tailwind")
+const { addDynamicIconSelectors } = require('@iconify/tailwind')
+const daisyui = require('daisyui')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,7 +7,5 @@ module.exports = {
 	theme: {
 		extend: {},
 	},
-	plugins: [
-		addDynamicIconSelectors()
-	],
+	plugins: [daisyui, addDynamicIconSelectors()],
 }

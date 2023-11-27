@@ -9,7 +9,7 @@ import { client, db } from '@/db'
 import { HTMLTemplateResult } from 'lit'
 import { render } from '@lit-labs/ssr'
 import { collectResult } from '@lit-labs/ssr/lib/render-result'
-import { TodoService } from '@/services/todo'
+import { TodoService } from '@/services/todos.service'
 
 const stream = pretty({
 	colorize: true,
@@ -53,6 +53,13 @@ export const context = new Elysia({
 			},
 		})
 	})
+	.decorate(
+		'error',
+		(msgOrError: string | Error) =>
+			new Response(JSON.stringify({ error: msgOrError instanceof Error ? msgOrError.message : msgOrError }), {
+				status: 400,
+			}),
+	)
 	.use(logger(loggerConfig))
 	.use(
 		// @ts-expect-error

@@ -25,9 +25,7 @@ function _TrySync<T, Args extends any[]>(fn: (...args: Args) => T): (...args: Ar
  * @param {(...args: Args) => Promise<T>} fn The original async function to wrap.
  * @returns {(...args: Args) => Promise<Result<T, Error>>} A new function that returns a Promise which resolves to a Result object.
  */
-function _Try<T, Args extends any[]>(
-	fn: (...args: Args) => Promise<T>,
-): (...args: Args) => Promise<Result<T, Error>> {
+function _Try<T, Args extends any[]>(fn: (...args: Args) => Promise<T>): (...args: Args) => Promise<Result<T, Error>> {
 	return async (...args: Args): Promise<Result<T, Error>> => {
 		try {
 			const result = await fn(...args)
@@ -39,7 +37,7 @@ function _Try<T, Args extends any[]>(
 }
 
 declare global {
-	type Result<T,E> = _Result<T,E>
+	type Result<T, E> = _Result<T, E>
 	type Option<T> = _Option<T>
 	var Ok: typeof _Ok
 	var Err: typeof _Err

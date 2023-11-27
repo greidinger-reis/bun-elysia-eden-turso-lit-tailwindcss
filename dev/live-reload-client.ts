@@ -1,4 +1,4 @@
-import fs from "fs"
+import fs from 'fs'
 
 //Source: https://github.com/ethanniser/the-beth-stack/
 export function liveReloadScript({
@@ -38,6 +38,6 @@ socket.onerror = function(error) {
 })();`
 }
 
-if(!fs.existsSync('public')) fs.mkdirSync('public')
+if (!fs.existsSync('public')) fs.mkdirSync('public')
 const file = Bun.file('public/live-reload.js')
-await Bun.write(file, liveReloadScript()).then(()=> console.log(`🦊 Live reload script file written successfully.`))
+await Bun.write(file, liveReloadScript()).then(() => console.log(`🦊 Live reload script file written successfully.`))

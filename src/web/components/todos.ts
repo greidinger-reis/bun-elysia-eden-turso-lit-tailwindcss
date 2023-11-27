@@ -1,10 +1,10 @@
 import { html } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { LitElementWithEden } from './shared/element'
+import { LitElement } from 'lit'
 import { Todo } from '@/db/schema'
 
 @customElement('x-todos')
-export class TodosComponent extends LitElementWithEden {
+export class TodosComponent extends LitElement {
 	@property({ type: Array })
 	todos: Todo[]
 	@state()
