@@ -1,25 +1,11 @@
 import { Elysia, t } from 'elysia'
 import { context } from '../context'
+import { Model } from '@/models'
 
 export const authController = new Elysia({
 	prefix: '/auth',
 })
 	.use(context)
-	.model({
-		signin: t.Object({
-			email: t.String({
-				format: 'email',
-			}),
-			password: t.String(),
-		}),
-		signup: t.Object({
-			name: t.String(),
-			email: t.String({
-				format: 'email',
-			}),
-			password: t.String(),
-		}),
-	})
 	.post(
 		'/signup',
 		async (ctx) => {
@@ -58,7 +44,7 @@ export const authController = new Elysia({
 			ctx.set.headers['Set-Cookie'] = sessionCookie.serialize()
 			return ctx.redirect('/new-user')
 		},
-		{ body: 'signup' },
+		{ body: Model.auth.signup },
 	)
 	.post(
 		'/signin',
@@ -78,7 +64,7 @@ export const authController = new Elysia({
 			ctx.set.headers['Set-Cookie'] = sessionCookie.serialize()
 			return ctx.redirect('/new-user')
 		},
-		{ body: 'signin' },
+		{ body: Model.auth.signin },
 	)
 	.get('/signout', async (ctx) => {
 		const authRequest = ctx.auth.handleRequest(ctx)
