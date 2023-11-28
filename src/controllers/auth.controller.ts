@@ -1,6 +1,8 @@
 import { Elysia, t } from 'elysia'
-import { context } from '../context'
-import { Model } from '@/models'
+import { context } from '@/context'
+import { type Key } from 'lucia'
+import * as Model from '@/models'
+import * as Utils from '@/utils'
 
 export const authController = new Elysia({
 	prefix: '/auth',
@@ -17,7 +19,7 @@ export const authController = new Elysia({
 						password: ctx.body.password,
 					},
 					attributes: {
-						name: ctx.body.name,
+						name: ctx.body.username,
 						picture: null,
 						email: ctx.body.email,
 					},
@@ -27,6 +29,13 @@ export const authController = new Elysia({
 			if (user.err) {
 				return ctx.error(user.val)
 			}
+
+			await Try(() => ctx.auth.createKey({
+				userId: user.val.userId,
+				providerId: 'username',
+				password: ctx.body.password,
+				providerUserId: ctx.body.username,
+			}))()
 
 			const session = await Try(() =>
 				ctx.auth.createSession({
@@ -44,27 +53,37 @@ export const authController = new Elysia({
 			ctx.set.headers['Set-Cookie'] = sessionCookie.serialize()
 			return ctx.redirect('/new-user')
 		},
-		{ body: Model.auth.signup },
+		{ body: Model.Auth.signup },
 	)
 	.post(
 		'/signin',
 		async (ctx) => {
-			const key = await Try(() => ctx.auth.useKey('email', ctx.body.email, ctx.body.password))()
-			if (key.err) return ctx.error(key.val)
+			let key: Key
+
+			if (Utils.String.isEmail(ctx.body.signinSubject)) {
+				const _key = await Try(() => ctx.auth.useKey('email', ctx.body.signinSubject, ctx.body.password))()
+				if (_key.err) return ctx.error(_key.val)
+				key = _key.val
+			} else {
+				const _key = await Try(() => ctx.auth.useKey('username', ctx.body.signinSubject, ctx.body.password))()
+				if (_key.err) return ctx.error(_key.val)
+				key = _key.val
+			}
 
 			const session = await Try(() =>
 				ctx.auth.createSession({
-					userId: key.val.userId,
+					userId: key.userId,
 					attributes: {},
 				}),
 			)()
+
 			if (session.err) return ctx.error(session.val)
 			const sessionCookie = ctx.auth.createSessionCookie(session.val)
 
 			ctx.set.headers['Set-Cookie'] = sessionCookie.serialize()
-			return ctx.redirect('/new-user')
+			return ctx.redirect('/')
 		},
-		{ body: Model.auth.signin },
+		{ body: Model.Auth.signin },
 	)
 	.get('/signout', async (ctx) => {
 		const authRequest = ctx.auth.handleRequest(ctx)
@@ -78,4 +97,11 @@ export const authController = new Elysia({
 
 		ctx.set.headers['Set-Cookie'] = sessionCookie.serialize()
 		ctx.redirect('/')
+	})
+	.post('/test', (ctx) => {
+		console.log(ctx.body)
+	}, {
+		body: t.Object({
+			email: t.String({ format: 'email' })
+		})
 	})

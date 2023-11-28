@@ -1,5 +1,1 @@
-import * as _auth from './auth.model'
-
-export namespace Model {
-	export const auth = _auth
-}
+export * as Auth from './auth.model'
