@@ -4,20 +4,20 @@ import { layout } from '../components/base'
 import { html } from 'lit'
 
 export const indexPage = new Elysia().use(context).get('/', ({ render, session }) => {
-	return render(
-		layout(
-			html`<div class="flex flex-col items-center py-3">
-				${session
-					? html`<h1 class="text-2xl font-bold text-gray-800" safe>Hi! ${session.user.name}</h1>
-							<sl-button href="/dashboard"> Visit Dashboard </sl-button>
-							<sl-button href="/api/auth/signout"> Sign Out </sl-button> `
-					: html`
-							<div class="flex gap-2 items-center">
-								<sl-button href="/auth/signin"> Sign in </sl-button>
-								<sl-button href="/auth/signup"> Sign up </sl-button>
-							</div>
-					  `}
-			</div>`,
-		),
-	)
+    return render(
+        layout(
+            html`<div class="flex flex-col items-center py-3">
+                ${session
+                    ? html`<h1 class="text-2xl font-bold text-gray-800" safe>Hi! ${session.user.name}</h1>
+                          <sl-button href="/dashboard"> Visit Dashboard </sl-button>
+                          <sl-button href="/api/auth/signout"> Sign Out </sl-button> `
+                    : html`
+                          <div class="flex gap-2 items-center">
+                              <sl-button href="/auth/signin"> Sign in </sl-button>
+                              <sl-button href="/auth/signup"> Sign up </sl-button>
+                          </div>
+                      `}
+            </div>`,
+        ),
+    )
 })

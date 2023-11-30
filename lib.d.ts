@@ -1,4 +1,4 @@
-import { Option as _Option, Result as _Result, Ok as _Ok, Err as _Err } from 'ts-results'
+import { Option as _Option, Result as _Result, Ok as _Ok, Err as _Err, Some as _Some, None as _None } from 'ts-results'
 
 /**
  * Wraps a synchronous function with a try-catch block and returns a Result type.
@@ -6,14 +6,14 @@ import { Option as _Option, Result as _Result, Ok as _Ok, Err as _Err } from 'ts
  * @returns A new function that returns a Result type.
  */
 function _TrySync<T, Args extends any[]>(fn: (...args: Args) => T): (...args: Args) => Result<T, Error> {
-	return (...args: Args): Result<T, Error> => {
-		try {
-			const result = fn(...args)
-			return Ok(result)
-		} catch (error) {
-			return Err(error instanceof Error ? error : new Error(String(error)))
-		}
-	}
+    return (...args: Args): Result<T, Error> => {
+        try {
+            const result = fn(...args)
+            return Ok(result)
+        } catch (error) {
+            return Err(error instanceof Error ? error : new Error(String(error)))
+        }
+    }
 }
 
 /**
@@ -26,27 +26,32 @@ function _TrySync<T, Args extends any[]>(fn: (...args: Args) => T): (...args: Ar
  * @returns {(...args: Args) => Promise<Result<T, Error>>} A new function that returns a Promise which resolves to a Result object.
  */
 function _Try<T, Args extends any[]>(fn: (...args: Args) => Promise<T>): (...args: Args) => Promise<Result<T, Error>> {
-	return async (...args: Args): Promise<Result<T, Error>> => {
-		try {
-			const result = await fn(...args)
-			return Ok(result)
-		} catch (error) {
-			return Err(error instanceof Error ? error : new Error(String(error)))
-		}
-	}
+    return async (...args: Args): Promise<Result<T, Error>> => {
+        try {
+            const result = await fn(...args)
+            return Ok(result)
+        } catch (error) {
+            return Err(error instanceof Error ? error : new Error(String(error)))
+        }
+    }
 }
 
 declare global {
-	type Result<T, E> = _Result<T, E>
-	type Option<T> = _Option<T>
-	var Ok: typeof _Ok
-	var Err: typeof _Err
-	var TrySync: typeof _TrySync
-	var Try: typeof _Try
+    type NullablePartial<T> = { [P in keyof T]?: T[P] | undefined | null }
+    type Result<T, E> = _Result<T, E>
+    type Option<T> = _Option<T>
+    var Some: typeof _Some
+    var None: typeof _None
+    var Ok: typeof _Ok
+    var Err: typeof _Err
+    var TrySync: typeof _TrySync
+    var Try: typeof _Try
 }
 
 global.Result = _Result
 global.Option = _Option
+global.Some = _Some
+global.None = _None
 global.Ok = _Ok
 global.Err = _Err
 global.TrySync = _TrySync

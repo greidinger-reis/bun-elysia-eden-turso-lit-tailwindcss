@@ -2,13 +2,13 @@ import fs from 'fs'
 
 //Source: https://github.com/ethanniser/the-beth-stack/
 export function liveReloadScript({
-	debounceTime = 100,
-	url = 'ws://localhost:3001/ws',
+    debounceTime = 100,
+    url = 'ws://localhost:3001/ws',
 }: {
-	url?: string
-	debounceTime?: number
+    url?: string
+    debounceTime?: number
 } = {}): string {
-	return `let reloadTimeout;
+    return `let reloadTimeout;
 (function () {
 let socket = new WebSocket(\"${url}\");
 

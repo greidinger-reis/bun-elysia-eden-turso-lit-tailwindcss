@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 [data-loading] {
-	display: none;
+    display: none;
 }
